@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# CNCjs config file
+.cncrc
+
+# Others
+.vscode/
