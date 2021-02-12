@@ -1,17 +1,13 @@
 #!/usr/bin/python3
-# coding: utf-8
+"""Standard gamepad mappings.
 """
-Standard gamepad mappings.
+import gamepad
 
-Pulled in to gamepad.py directly.
-"""
-
-
-class PS3(Gamepad):
+class PS3(gamepad.Gamepad):
   fullName = 'PlayStation 3 controller'
 
   def __init__(self, joystick_number=0):
-    Gamepad.__init__(self, joystick_number)
+    super().__init__(self, joystick_number)
     self.axis_names = {
       0: 'LEFT-X',
       1: 'LEFT-Y',
@@ -42,11 +38,11 @@ class PS3(Gamepad):
     self.setup_reverse_aps()
 
 
-class PS4(Gamepad):
+class PS4(gamepad.Gamepad):
   fullName = 'PlayStation 4 controller'
 
   def __init__(self, joystick_number=0):
-    Gamepad.__init__(self, joystick_number)
+    super().__init__(self, joystick_number)
     self.axis_names = {
       0: 'LEFT-X',
       1: 'LEFT-Y',
@@ -75,11 +71,11 @@ class PS4(Gamepad):
     self.setup_reverse_aps()
 
 
-class Xbox360(Gamepad):
+class Xbox360(gamepad.Gamepad):
   fullName = 'Xbox 360 controller'
 
   def __init__(self, joystick_number=0):
-    Gamepad.__init__(self, joystick_number)
+    super().__init__(self, joystick_number)
     self.axis_names = {
       0: 'LEFT-X',
       1: 'LEFT-Y',
@@ -104,11 +100,11 @@ class Xbox360(Gamepad):
     self.setup_reverse_aps()
 
 
-class MMP1251(Gamepad):
+class MMP1251(gamepad.Gamepad):
   fullName = "ModMyPi Raspberry Pi Wireless USB Gamepad"
 
   def __init__(self, joystick_number=0):
-    Gamepad.__init__(self, joystick_number)
+    super().__init__(self, joystick_number)
     self.axis_names = {
       0: 'LEFT-X',
       1: 'LEFT-Y',

@@ -15,8 +15,8 @@ import inspect
 
 def available(joystick_number=0):
   """Check if a joystick is connected and ready to use."""
-  joystickPath = '/dev/input/js' + str(joystick_number)
-  return os.path.exists(joystickPath)
+  joystick_path = f'/dev/input/js{joystick_number}'
+  return os.path.exists(joystick_path)
 
 
 class Gamepad:
@@ -56,7 +56,7 @@ class Gamepad:
 
   def __init__(self, joystick_number=0):
     self.joystick_number = str(joystick_number)
-    self.joystick_path = '/dev/input/js' + self.joystick_number
+    self.joystick_path = f'/dev/input/js{self.joystick_number}'
     retry_count = 5
     while True:
       try:
@@ -368,19 +368,3 @@ class Gamepad:
     self.connected = False
     self.stop_background_updates()
     del self.joystick_file
-
-
-###########################
-# Import gamepad mappings #
-###########################
-_script_dir = os.path.dirname(os.path.realpath(__file__))
-_controller_script = os.path.join(_script_dir, "controllers.py")
-exec(open(_controller_script).read())
-
-# Generate a list of available gamepad types
-module_dict = globals()
-_class_list = [module_dict[a]
-         for a in module_dict.keys() if inspect.isclass(module_dict[a])]
-controller_dict = {}
-for gamepad in _class_list:
-  controller_dict[gamepad.__name__.upper()] = gamepad
