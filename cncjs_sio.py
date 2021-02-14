@@ -1,8 +1,9 @@
 import asyncio
 import logging
+from typing import Any, Callable, List
+
 import socketio
 
-from typing import Callable, List, Any
 
 def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
   def debug_log_handler(*args) -> None:
@@ -17,6 +18,7 @@ class CNCjs_SIO:
   def __init__(self):
     self.client = socketio.AsyncClient()
     self.connected = asyncio.Event()
+
     self.client.on('connect', self._connect_handler)
     self.client.on('disconnect', self._disconnect_handler)
     for handler in ('serialport:read', 'serialport_write'):
@@ -28,10 +30,16 @@ class CNCjs_SIO:
   async def connect(self, address: str, token: str):
     full_address = fr'ws://{address}/socket.io/\?token={token}'
     logging.info(f'Attempting to connect to {full_address}')
-    await self.client.connect(full_address)
+    while True:
+      try:
+        await self.client.connect(full_address)
+        break
+      except socketio.exceptions.ConnectionError:
+        logging.warning('Unable to connect, will retry in 1 second')
+        await asyncio.sleep(1)
     logging.info('Connection requested, waiting for confirmation')
     await self.connected.wait()
-    logging.info(f'Connected, SID: {self.client.get_sid()}')
+    logging.info(f'Connected')
 
   async def _connect_handler(self):
     logging.info('Server reported connection')
