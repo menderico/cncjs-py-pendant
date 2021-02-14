@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # coding: utf-8
 """
-This module is designed to read inputs from a gamepad or joystick.
-See controllers.py the names which can be used with specific gamepad types.
+This module is designed to read inputs from a gamepad or joystick. 
 """
 
 import os
