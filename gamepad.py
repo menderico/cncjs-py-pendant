@@ -12,11 +12,13 @@ import threading
 import time
 from typing import Any, Callable, Dict, Optional
 
+from typing import Dict, Optional
+
 
 def available(joystick_number=0):
-  """Check if a joystick is connected and ready to use."""
-  joystick_path = f'/dev/input/js{joystick_number}'
-  return os.path.exists(joystick_path)
+    """Check if a joystick is connected and ready to use."""
+    joystick_path = f'/dev/input/js{joystick_number}'
+    return os.path.exists(joystick_path)
 
 
 class Gamepad:
