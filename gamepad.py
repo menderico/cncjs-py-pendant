@@ -11,7 +11,7 @@ import time
 import threading
 import inspect
 
-from typing import Dict, Optional
+from typing import Dict, Optional, Callable
 
 
 def available(joystick_number=0):
@@ -376,8 +376,17 @@ class Gamepad:
 
 # Factories for common joysticks
 
+_GAMEPADS: Dict[str, Callable[[], Gamepad]] = {}
 
-def PS3():
+def _gamepad_factory(factory: Callable[[], Gamepad]) -> Callable[[], Gamepad]:
+  _GAMEPADS[factory.__name__] = factory
+  return factory
+
+def get_gamepad_by_name(device_name: str) -> Gamepad:
+  return _GAMEPADS[device_name]()
+
+@_gamepad_factory
+def PS3() -> Gamepad:
     return Gamepad(
         axis_names={
             0: 'LEFT-X',
@@ -408,7 +417,8 @@ def PS3():
         })
 
 
-def PS4():
+@_gamepad_factory
+def PS4() -> Gamepad:
     return Gamepad(
         axis_names={
             0: 'LEFT-X',
@@ -438,7 +448,8 @@ def PS4():
     )
 
 
-def Xbox360():
+@_gamepad_factory
+def Xbox360() -> Gamepad:
     return Gamepad(axis_names={
         0: 'LEFT-X',
         1: 'LEFT-Y',
@@ -462,7 +473,8 @@ def Xbox360():
     })
 
 
-def MMP1251():
+@_gamepad_factory
+def MMP1251() -> Gamepad:
     return Gamepad(
         axis_names={
             0: 'LEFT-X',
