@@ -57,7 +57,7 @@ class MagnitudeAxis:
       the direction of the movement and the value represents the "intensity" of the
       movement.
     """
-    label: str
+    label: str = ''
     slow_move_step: float = 0.1
     mid_move_step: float = 1
     fast_move_step: float = 10
