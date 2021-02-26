@@ -13,12 +13,12 @@ def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
     return debug_log_handler
 
 
-def generate_access_token_from_cncrc(cncrc: TextIO):
+def generate_access_token_from_cncrc(cncrc: TextIO) -> str:
     config = json.loads(cncrc.read())
     return jwt.encode(
         payload={'id': '', 'name': 'cncjs-py-pendant'},
         key=config['secret'],
-        algorithm='HS256')
+        algorithm='HS256').decode()
 
 
 class CNCjs_SIO:
@@ -32,7 +32,7 @@ class CNCjs_SIO:
 
         self.client.on('connect', self._connect_handler)
         self.client.on('disconnect', self._disconnect_handler)
-        for handler in ('serialport:read', 'serialport_write'):
+        for handler in ('serialport:read', 'serialport:write'):
             self._set_debug_handler(handler)
 
     def _set_debug_handler(self, handler: str):

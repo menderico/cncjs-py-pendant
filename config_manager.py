@@ -64,7 +64,7 @@ def get_config(config_file: TextIO) -> ConfigObjects:
       gamepad=pad, 
       mapped_commands=commands,
       address=server_section[_ADDRESS_OPTION],
-      cnc_port=server_section[_ADDRESS_OPTION],
+      cnc_port=server_section[_CNC_PORT_OPTION],
       baudrate=server_section.getint(_BAUDRATE_OPTION),
       controller_type=server_section[_CONTROLLER_TYPE_OPTION])
 

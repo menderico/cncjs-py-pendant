@@ -229,8 +229,8 @@ _MAPS: Dict[GamepadAndCNCMachine, Tuple[MappedCommand, ...]] = {
         MappedCommand(axis=z_joystick_axis('RIGHT-Y'), movement_axis=MovementAxis.Z,
                       reverse_axis_direction=True),
     ) + directional_buttons(
-        positive_button='DPAD-LEFT',
-        negative_button='DPAD-RIGHT',
+        positive_button='DPAD-RIGHT',
+        negative_button='DPAD-LEFT',
         movement_axis=MovementAxis.X,
         magnitude_axis=XY_L2_MAGNITUDE_AXIS
     ) + directional_buttons(
@@ -241,7 +241,7 @@ _MAPS: Dict[GamepadAndCNCMachine, Tuple[MappedCommand, ...]] = {
     ) + directional_buttons(
         positive_button='TRIANGLE',
         negative_button='CROSS',
-        movement_axis=MovementAxis.Y,
+        movement_axis=MovementAxis.Z,
         magnitude_axis=Z_L2_MAGNITUDE_AXIS
     )
 }

@@ -50,7 +50,7 @@ def get_commands(config: config_manager.ConfigObjects) -> Tuple[command_mapping.
     if move.direction:
       distance = move.magnitude_axis.travel_distance(
         config.gamepad.axis(move.magnitude_axis.label))
-      gcode_moves.append(f'{axis}{distance * move.direction}')
+      gcode_moves.append(f'{axis.value}{distance * move.direction}')
   if gcode_moves:
     # Set G-code prefixes for the move
     gcode_moves = ['G91'] + gcode_moves

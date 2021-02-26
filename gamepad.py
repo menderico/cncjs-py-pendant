@@ -253,12 +253,12 @@ class Gamepad:
     This allows for asynchronous gamepad updates and event callback code.
 
     Do not use with get_next_event"""
-    if self.UpdateThread is not None:
-      if self.UpdateThread.running:
+    if self.update_thread:
+      if self.update_thread.running:
         raise RuntimeError(
           'Called startBackgroundUpdates when the update thread is already running')
-    self.UpdateThread = Gamepad.UpdateThread(self)
-    self.UpdateThread.start()
+    self.update_thread = Gamepad.UpdateThread(self)
+    self.update_thread.start()
     if wait_for_ready:
       while not self.is_ready() and self.connected:
         time.sleep(1.0)
@@ -268,8 +268,8 @@ class Gamepad:
     This may be called even if the background thread was never started.
 
     The thread will stop on the next event after this call was made."""
-    if self.UpdateThread is not None:
-      self.UpdateThread.running = False
+    if self.update_thread is not None:
+      self.update_thread.running = False
 
   def is_ready(self):
     """Used with update_state to indicate that the gamepad is now ready for use.
