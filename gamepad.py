@@ -4,8 +4,11 @@
 This module is designed to read inputs from a gamepad or joystick. 
 """
 
+import asyncio
 import inspect
+import logging
 import os
+import pathlib
 import struct
 import sys
 import threading
@@ -13,12 +16,6 @@ import time
 from typing import Any, Callable, Dict, Optional
 
 from typing import Dict, Optional
-
-
-def available(joystick_number=0):
-    """Check if a joystick is connected and ready to use."""
-    joystick_path = f'/dev/input/js{joystick_number}'
-    return os.path.exists(joystick_path)
 
 
 class Gamepad:
@@ -56,23 +53,10 @@ class Gamepad:
         raise
 
   def __init__(self, *,
-         joystick_number: int = 0,
+         joystick_path: pathlib.Path = pathlib.Path('/dev/input/js0'),
          button_names: Optional[Dict[int, str]] = None,
          axis_names: Optional[Dict[int, str]] = None):
-    self.joystick_number = str(joystick_number)
-    self.joystick_path = f'/dev/input/js{self.joystick_number}'
-    retry_count = 5
-    while True:
-      try:
-        self.joystick_file = open(self.joystick_path, 'rb')
-        break
-      except IOError as e:
-        retry_count -= 1
-        if retry_count > 0:
-          time.sleep(0.5)
-        else:
-          raise IOError('Could not open gamepad %s: %s' %
-                  (self.joystick_number, str(e)))
+    self.joystick_path = joystick_path
     self.event_size = struct.calcsize('LhBB')
     self.pressed_map: Dict[int, bool] = {}
     self.was_pressed_map: Dict[int, bool] = {}
@@ -97,6 +81,14 @@ class Gamepad:
     except AttributeError:
       pass
 
+  async def open(self):
+    logging.info(f'Attempting to open joystick {self.joystick_path}')
+    while not self.joystick_path.exists():
+      logging.info(f'Joystick {self.joystick_path} not found, retrying in 1 second')
+      await asyncio.sleep(1.0)
+    self.joystick_file = self.joystick_path.open()
+    logging.info(f'Opened joystick {self.joystick_path}')
+
   def _setup_reverse_maps(self):
     for index in self.button_names:
       self.button_index[self.button_names[index]] = index
@@ -114,11 +106,10 @@ class Gamepad:
         raw_event = self.joystick_file.read(self.event_size)
       except IOError as e:
         self.connected = False
-        raise IOError('Gamepad %s disconnected: %s' %
-                (self.joystick_number, str(e)))
+        raise IOError(f'Gamepad {self.joystick_path} disconnected', e)
       if raw_event is None:
         self.connected = False
-        raise IOError('Gamepad %s disconnected' % self.joystick_number)
+        raise IOError(f'Gamepad {self.joystick_path} disconnected')
       else:
         return struct.unpack('LhBB', raw_event)
     else:

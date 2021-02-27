@@ -73,7 +73,7 @@ async def main():
   )
 
   # Open config files
-  config_path = pathlib.Path('~/.cncjs_py_pendant_config').expanduser().resolve()
+  config_path = pathlib.Path('~/.cncjs-py-pendant-config').expanduser().resolve()
   if not config_path.exists():
     with config_path.open('w') as config_file:
       config_manager.write_default_config(config_file)
@@ -86,13 +86,8 @@ async def main():
     token = cncjs_sio.generate_access_token_from_cncrc(f)
 
   sio = cncjs_sio.CNCjs_SIO()
-  await sio.connect(config.address, token)
+  await asyncio.gather(sio.connect(config.address, token), config.gamepad.open())
   await sio.client.emit('open', (config.cnc_port, {'baudrate': config.baudrate, 'controllerType': config.controller_type}))
-  if not gamepad.available():
-    print('Please connect your gamepad...')
-    while not gamepad.available():
-      await asyncio.sleep(1.0)
-
   config.gamepad.start_background_updates()
   while await sio.connected.wait():
     commands = get_commands(config)

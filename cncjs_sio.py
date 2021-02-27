@@ -15,10 +15,12 @@ def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
 
 def generate_access_token_from_cncrc(cncrc: TextIO) -> str:
     config = json.loads(cncrc.read())
-    return jwt.encode(
+    token = jwt.encode(
         payload={'id': '', 'name': 'cncjs-py-pendant'},
         key=config['secret'],
-        algorithm='HS256').decode()
+        algorithm='HS256')
+    # Token can be either byte or string, depend on the implementation.
+    return token if isinstance(token, str) else token.decode()
 
 
 class CNCjs_SIO:

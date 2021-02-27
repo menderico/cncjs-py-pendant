@@ -33,7 +33,7 @@ _CNC_OPTION = 'cnc machine'
 def write_default_config(config_file: TextIO) -> None:
   config = configparser.ConfigParser()
   config[_SERVER_SECTION] = {}
-  config[_SERVER_SECTION][_ADDRESS_OPTION] = '127.0.0.1:8080'
+  config[_SERVER_SECTION][_ADDRESS_OPTION] = '127.0.0.1:8000'
   config[_SERVER_SECTION][_CNC_PORT_OPTION] = '/dev/ttyACM0'
   config[_SERVER_SECTION][_BAUDRATE_OPTION] = '115200'
   config[_SERVER_SECTION][_CONTROLLER_TYPE_OPTION] = 'Grbl'
