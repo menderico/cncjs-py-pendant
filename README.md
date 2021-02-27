@@ -4,9 +4,9 @@ CNCjs pendant to control CNC machines using joysticks. Written in Python.
 # Compatibility
 The following combinations have been tested and verified to work
 
-| Controller device | CNC      | Joystick |
-|-------------------|----------|----------|
-| Raspberry Pi      | Shapeoko | PS3      |
+| Controller OS   | CNC      | Joystick |
+|-----------------|----------|----------|
+| Raspberry Pi OS | Shapeoko | PS3      |
 
 # Installation
 
