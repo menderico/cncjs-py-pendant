@@ -6,7 +6,6 @@ from typing import Any, Callable, List, TextIO
 import jwt
 import socketio
 
-
 def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
     def debug_log_handler(*args) -> None:
         logging.debug(f'{prefix}: {args}')
