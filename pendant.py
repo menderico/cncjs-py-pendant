@@ -61,17 +61,6 @@ def get_commands(config: config_manager.ConfigObjects) -> Tuple[command_mapping.
 
 
 async def main():
-  # Set up logging
-  file_handler = logging.FileHandler(filename='tmp.log')
-  stdout_handler = logging.StreamHandler()
-  handlers = [file_handler, stdout_handler]
-
-  logging.basicConfig(
-    level=logging.INFO,
-    format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
-    handlers=handlers
-  )
-
   # Open config files
   config_path = pathlib.Path('~/.cncjs-py-pendant-config').expanduser().resolve()
   if not config_path.exists():
