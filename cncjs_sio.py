@@ -32,7 +32,13 @@ async def get_macro_ids(address: str, token: str):
             'content-type': 'application/json'
         }
     )
-    return response.text
+
+    if response.status_code != requests.codes.ok:
+      response.raise_for_status()
+
+    return {
+      macro['name']: macro['id'] for macro in response.json()['records']
+    }
 
 
 class CNCjs_SIO:
