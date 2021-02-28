@@ -1,10 +1,12 @@
 import asyncio
 import json
 import logging
+import requests
 from typing import Any, Callable, List, TextIO
 
 import jwt
 import socketio
+
 
 def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
     def debug_log_handler(*args) -> None:
@@ -18,8 +20,19 @@ def generate_access_token_from_cncrc(cncrc: TextIO) -> str:
         payload={'id': '', 'name': 'cncjs-py-pendant'},
         key=config['secret'],
         algorithm='HS256')
-    # Token can be either byte or string, depend on the implementation.
+    # Token can be either byte or string, depends on the implementation.
     return token if isinstance(token, str) else token.decode()
+
+
+async def get_macro_ids(address: str, token: str):
+    response = requests.get(
+        url=f'http://{address}/api/macros',
+        headers={
+            'Authorization': f'Bearer {token}',
+            'content-type': 'application/json'
+        }
+    )
+    return response.text
 
 
 class CNCjs_SIO:
