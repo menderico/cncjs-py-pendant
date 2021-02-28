@@ -17,6 +17,16 @@ import config_manager
 
 from typing import Tuple, Dict
 
+# set logging for the project
+_handler = logging.StreamHandler()
+_handler.setLevel(logging.INFO)
+_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+_handler.setFormatter(_formatter)
+_logger = logging.getLogger('cncjs-py-pendant')
+_logger.addHandler(_handler)
+logging.getLogger().setLevel(logging.INFO)
+
+
 @dataclasses.dataclass
 class Move:
   direction: int = 0

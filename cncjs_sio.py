@@ -8,9 +8,12 @@ import jwt
 import socketio
 
 
+_logger = logging.getLogger('cncjs-py-pendant')
+
+
 def debug_log_handler_factory(prefix: str) -> Callable[..., None]:
     def debug_log_handler(*args) -> None:
-        logging.debug(f'{prefix}: {args}')
+        _logger.debug(f'{prefix}: {args}')
     return debug_log_handler
 
 
@@ -60,22 +63,22 @@ class CNCjs_SIO:
 
     async def connect(self, address: str, token: str):
         full_address = fr'ws://{address}/socket.io/\?token={token}'
-        logging.info(f'Attempting to connect to {full_address}')
+        _logger.info(f'Attempting to connect to {full_address}')
         while True:
             try:
                 await self.client.connect(full_address)
                 break
             except socketio.exceptions.ConnectionError:
-                logging.warning('Unable to connect, will retry in 1 second')
+                _logger.info('Unable to connect, will retry in 1 second')
                 await asyncio.sleep(1)
-        logging.info('Connection requested, waiting for confirmation')
+        _logger.info('Connection requested, waiting for confirmation')
         await self.connected.wait()
-        logging.info(f'Connected')
+        _logger.info(f'Connected')
 
     async def _connect_handler(self):
-        logging.info('Server reported connection')
+        _logger.info('Server reported connection')
         self.connected.set()
 
     async def _disconnect_handler(self):
-        logging.info('Server reported disconnection')
+        _logger.info('Server reported disconnection')
         self.connected.clear()

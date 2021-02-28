@@ -15,8 +15,8 @@ import threading
 import time
 from typing import Any, Callable, Dict, Optional
 
-from typing import Dict, Optional
 
+_logger = logging.getLogger('cncjs-py-pendant')
 
 class Gamepad:
   EVENT_CODE_BUTTON = 0x01
@@ -82,12 +82,12 @@ class Gamepad:
       pass
 
   async def open(self):
-    logging.info(f'Attempting to open joystick {self.joystick_path}')
+    _logger.info(f'Attempting to open joystick {self.joystick_path}')
     while not self.joystick_path.exists():
-      logging.info(f'Joystick {self.joystick_path} not found, retrying in 1 second')
+      _logger.info(f'Joystick {self.joystick_path} not found, retrying in 1 second')
       await asyncio.sleep(1.0)
     self.joystick_file = self.joystick_path.open()
-    logging.info(f'Opened joystick {self.joystick_path}')
+    _logger.info(f'Opened joystick {self.joystick_path}')
 
   def _setup_reverse_maps(self):
     for index in self.button_names:
